@@ -1,0 +1,14 @@
+# The main pipeline for MlOpsDatabricks
+resources:
+  pipelines:
+    MlOpsDatabricks_pipeline:
+      name: MlOpsDatabricks_pipeline
+      ## Specify the 'catalog' field to configure this pipeline to make use of Unity Catalog:
+      # catalog: catalog_name
+      schema: MlOpsDatabricks_${bundle.target}
+      libraries:
+        - notebook:
+            path: ../src/pipeline.ipynb
+
+      configuration:
+        bundle.sourcePath: ${workspace.file_path}/src

@@ -1,1 +1,1 @@
-from .operations import add
+from .example import add

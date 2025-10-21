@@ -1,0 +1,42 @@
+# This is a Databricks asset bundle definition for MlOpsDatabricks.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: MlOpsDatabricks
+  uuid: 29d29e91-22e8-493d-a73f-b63e5c30bf0b
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1220488744982329.9.azuredatabricks.net
+
+    presets:
+      # Set dynamic_version: true on all artifacts of type "whl".
+      # This makes "bundle deploy" add a timestamp to wheel's version before uploading,
+      # new wheel takes over the previous installation even if actual wheel version is unchanged.
+      # See https://docs.databricks.com/aws/en/dev-tools/bundles/settings
+      artifacts_dynamic_version: true
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-1220488744982329.9.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/admin@mngenvmcap542240.onmicrosoft.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/admin@mngenvmcap542240.onmicrosoft.com/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: admin@mngenvmcap542240.onmicrosoft.com
+        level: CAN_MANAGE
