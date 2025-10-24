@@ -1,5 +1,5 @@
 # Download CSV file to DBFS
-dbutils.fs.rm("dbfs:/mlflow_lab")
+dbutils.fs.rm("dbfs:/mlflow_lab", recurse=True)
 dbutils.fs.mkdirs("dbfs:/mlflow_lab")
 dbutils.fs.cp("https://raw.githubusercontent.com/MicrosoftLearning/mslearn-databricks/main/data/penguins.csv", "dbfs:/mlflow_lab/penguins.csv")
 
